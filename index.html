@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f8f8;
+            margin: 0;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group-inline {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .form-group-inline .form-group {
+            width: 48%;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        input[type="tel"],
+        select {
+            padding: 12px; /* Increased padding for height */
+            border: 1px solid #cccccc;
+            border-radius: 12px; /* More rounded corners */
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            font-weight: 100; /* Thinner font */
+            margin-top: 5px;
+        }
+
+        input[type="text"]::placeholder,
+        input[type="email"]::placeholder,
+        input[type="password"]::placeholder,
+        input[type="number"]::placeholder,
+        input[type="tel"]::placeholder,
+        select option {
+            color: #999999; /* Matching color for placeholder text */
+        }
+
+        .form-group-inline input[type="text"],
+        .form-group-inline input[type="number"] {
+            width: 100%;
+        }
+
+        input[type="radio"] {
+            accent-color: green;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        input[type="checkbox"] {
+            accent-color: green;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        .label-with-radio {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 100; /* Thinner font */
+        }
+
+        .label-with-checkbox {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 100; /* Thinner font */
+        }
+
+        .save-card {
+            display: flex;
+            align-items: center;
+        }
+
+        .save-card label {
+            margin: 0;
+            font-weight: 100; /* Thinner font */
+            font-size: 14px;
+        }
+
+        select {
+            color: #999999; /* Set the initial placeholder color */
+        }
+
+        select option {
+            color: #000000; /* Normal text color for options */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="form-container">
+        <form action="">
+            <div class="label-with-radio">
+                <input type="radio" name="payment_method" id="credit_debit" checked>
+                <label for="credit_debit">Credit or debit</label>
+            </div>
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder="Email address">
+            </div>
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <input type="text" id="first_name" name="first_name" placeholder="First name">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="last_name" name="last_name" placeholder="Last name">
+                </div>
+            </div>
+            <div class="label-with-checkbox">
+                <input type="checkbox" id="use_billing_name" name="use_billing_name">
+                <label for="use_billing_name">Use as billing name</label>
+            </div>
+            <div class="form-group">
+                <input type="text" id="card_number" name="card_number" placeholder="Card number">
+            </div>
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <input type="text" id="expiry_date" name="expiry_date" placeholder="MM/YY">
+                </div>
+                <div class="form-group">
+                    <input type="text" id="cvv" name="cvv" placeholder="CVV">
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="text" id="name_on_card" name="name_on_card" placeholder="Name on card">
+            </div>
+            <div class="form-group-inline">
+                <div class="form-group">
+                    <select id="country" name="country">
+                        <option value="" disabled selected>Country</option>
+                        <!-- Add country options here -->
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" id="postal_code" name="postal_code" placeholder="Postal code">
+                </div>
+            </div>
+            <div class="save-card">
+                <input type="checkbox" id="save_card" name="save_card">
+                <label for="save_card">Save card for future donations</label>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>

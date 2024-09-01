@@ -57,9 +57,9 @@
     // Function to update Firestore with form data
     async function updateFirestore(data) {
       try {
-        const docRef = doc(db, 'dynamicDataCollection', 'dynamicDataDocument');
+        const docRef = doc(db, 'donateDataCollection', 'donateDataDocument');
         await setDoc(docRef, data, { merge: true });
-        console.log("Document successfully updated!");
+        console.log("Document successfully updated sir!");
       } catch (error) {
         console.error("Error updating document: ", error);
       }

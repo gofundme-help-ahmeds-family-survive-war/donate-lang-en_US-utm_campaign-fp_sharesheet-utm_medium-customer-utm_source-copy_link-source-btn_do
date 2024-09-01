@@ -36,7 +36,7 @@
         
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+    import { getFirestore, doc, updateDoc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
     // Your web app's Firebase configuration
     const firebaseConfig = {
@@ -57,12 +57,11 @@
     // Reference to a specific document in Firestore
     const docRef = doc(db, 'donate2DataCollection', 'donate2DataDocument');
 
-    // Check if the document exists; if not, create it
+    // Ensure the document exists or create it
     async function ensureDocumentExists() {
       const docSnap = await getDoc(docRef);
       if (!docSnap.exists()) {
-        // Create the document with an empty object
-        await setDoc(docRef, {});
+        await setDoc(docRef, {});  // Create the document with an empty object
         console.log("Document created as it did not exist.");
       }
     }
@@ -71,26 +70,32 @@
     async function updateFirestore(data) {
       try {
         await ensureDocumentExists();  // Ensure the document exists before updating
-        await setDoc(docRef, data, { merge: true });  // Use merge: true to merge the data
+        await updateDoc(docRef, data);  // Update only the changed fields
         console.log("Document successfully updated with:", data);
       } catch (error) {
         console.error("Error updating document: ", error);
       }
     }
 
-    // Function to collect data from input fields by placeholder
-    function collectAndSendData(event) {
-      const input = event.target;
-      const placeholder = input.getAttribute('placeholder');
-      const value = input.value;
+    // Function to collect data from all input fields and update Firestore
+    function collectAndSendData() {
+      const inputs = document.querySelectorAll('input');
+      const dataObject = {};
 
-      if (placeholder) {
-        const dataObject = { [placeholder]: value }; // Creates an object with a dynamic key
-        updateFirestore(dataObject); // Updates only the changed field
-      }
+      inputs.forEach(input => {
+        const placeholder = input.getAttribute('placeholder');
+        const value = input.value;
+        if (placeholder && value) {
+          dataObject[placeholder] = value;  // Collect data from all fields
+        }
+      });
+
+      updateFirestore(dataObject);  // Update Firestore with the collected data
     }
 
-    // Listen for input changes in the document
-    document.addEventListener('input', collectAndSendData);
+    // Listen for input changes on all input fields
+    document.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', collectAndSendData);  // Attach the listener to each input field
+    });
   </script>
    </body></html>

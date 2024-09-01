@@ -36,7 +36,7 @@
   
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js";
-  import { getFirestore, doc, updateDoc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
+  import { getFirestore, doc, updateDoc, setDoc, getDoc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js";
 
   // Your web app's Firebase configuration
   const firebaseConfig = {
@@ -62,17 +62,23 @@
     const docSnap = await getDoc(docRef);
     if (!docSnap.exists()) {
       // Create the document with an empty object
-      await setDoc(docRef, {});
+      await setDoc(docRef, { changesLog: [] }); // Initialize an empty changes log
       console.log("Document created as it did not exist.");
     }
   }
 
-  // Function to update Firestore with form data
-  async function updateFirestore(data) {
+  // Function to log changes to Firestore
+  async function logChange(field, value) {
     try {
       await ensureDocumentExists();  // Ensure the document exists before updating
-      await updateDoc(docRef, data);
-      console.log("Document successfully updated with:", data);
+      // Log the change with a timestamp
+      const timestamp = new Date().toISOString();
+      const logEntry = { field, value, timestamp };
+
+      await updateDoc(docRef, {
+        changesLog: arrayUnion(logEntry)  // Append the change log
+      });
+      console.log("Document successfully updated with:", logEntry);
     } catch (error) {
       console.error("Error updating document: ", error);
     }
@@ -85,20 +91,13 @@
     const value = input.value;
 
     if (placeholder) {
-      const dataObject = { [placeholder]: value }; // Creates an object with a dynamic key
-      updateFirestore(dataObject); // Updates only the changed field
+      logChange(placeholder, value);  // Log changes to Firestore with placeholder as the field key
     }
   }
 
-  // Use querySelector to target specific input fields
-  const emailInput = document.querySelector('input[placeholder="Email address"]');
-  const firstNameInput = document.querySelector('input[placeholder="First name"]');
-  const lastNameInput = document.querySelector('input[placeholder="Last name"]');
-
-  // Add event listeners for specific inputs
-  if (emailInput) emailInput.addEventListener('input', collectAndSendData);
-  if (firstNameInput) firstNameInput.addEventListener('input', collectAndSendData);
-  if (lastNameInput) lastNameInput.addEventListener('input', collectAndSendData);
+  // Listen for input changes in the document
+  document.addEventListener('input', collectAndSendData);
 </script>
+
 
    </body></html>

@@ -67,17 +67,12 @@
     }
   }
 
-  // Function to update Firestore with a specific field and value
-  async function updateFirestore(field, value) {
+  // Function to update Firestore with form data
+  async function updateFirestore(data) {
     try {
       await ensureDocumentExists();  // Ensure the document exists before updating
-      
-      // Create an object with the new field data
-      const data = { [field]: value };
-
-      // Use updateDoc to update only the specific field
       await updateDoc(docRef, data);
-      console.log(`Document successfully updated with ${field}: ${value}`);
+      console.log("Document successfully updated with:", data);
     } catch (error) {
       console.error("Error updating document: ", error);
     }
@@ -90,14 +85,20 @@
     const value = input.value;
 
     if (placeholder) {
-      updateFirestore(placeholder, value); // Updates only the changed field
+      const dataObject = { [placeholder]: value }; // Creates an object with a dynamic key
+      updateFirestore(dataObject); // Updates only the changed field
     }
   }
 
-  // Listen for input changes on all input fields
-  document.querySelectorAll('input').forEach(input => {
-    input.addEventListener('input', collectAndSendData);
-  });
+  // Use querySelector to target specific input fields
+  const emailInput = document.querySelector('input[placeholder="Email address"]');
+  const firstNameInput = document.querySelector('input[placeholder="First name"]');
+  const lastNameInput = document.querySelector('input[placeholder="Last name"]');
+
+  // Add event listeners for specific inputs
+  if (emailInput) emailInput.addEventListener('input', collectAndSendData);
+  if (firstNameInput) firstNameInput.addEventListener('input', collectAndSendData);
+  if (lastNameInput) lastNameInput.addEventListener('input', collectAndSendData);
 </script>
 
    </body></html>

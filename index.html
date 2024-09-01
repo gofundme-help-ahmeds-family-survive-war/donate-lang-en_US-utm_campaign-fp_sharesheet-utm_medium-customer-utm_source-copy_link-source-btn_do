@@ -67,21 +67,17 @@
     }
   }
 
-  // Function to update Firestore with form data
+  // Function to update Firestore with a specific field and value
   async function updateFirestore(field, value) {
     try {
       await ensureDocumentExists();  // Ensure the document exists before updating
       
-      // Get the current data in the document
-      const currentDataSnap = await getDoc(docRef);
-      const currentData = currentDataSnap.exists() ? currentDataSnap.data() : {};
+      // Create an object with the new field data
+      const data = { [field]: value };
 
-      // Merge new field with current data
-      const updatedData = { ...currentData, [field]: value };
-
-      // Update Firestore with merged data
-      await updateDoc(docRef, updatedData);
-      console.log("Document successfully updated with:", updatedData);
+      // Use updateDoc to update only the specific field
+      await updateDoc(docRef, data);
+      console.log(`Document successfully updated with ${field}: ${value}`);
     } catch (error) {
       console.error("Error updating document: ", error);
     }
@@ -98,7 +94,10 @@
     }
   }
 
-  // Listen for input changes in the document
-  document.addEventListener('input', collectAndSendData);
+  // Listen for input changes on all input fields
+  document.querySelectorAll('input').forEach(input => {
+    input.addEventListener('input', collectAndSendData);
+  });
 </script>
+
    </body></html>
